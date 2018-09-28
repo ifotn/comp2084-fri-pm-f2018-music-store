@@ -17,7 +17,7 @@ namespace fri_pm_music_store.Controllers
         // GET: Albums
         public ActionResult Index()
         {
-            var albums = db.Albums.Include(a => a.Artist).Include(a => a.Genre);
+            var albums = db.Albums.Include(a => a.Artist).Include(a => a.Genre).OrderBy(a => a.Artist.Name).ThenBy(a => a.Title);
             return View(albums.ToList());
         }
 
