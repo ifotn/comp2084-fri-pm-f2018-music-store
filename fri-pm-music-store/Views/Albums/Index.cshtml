@@ -1,23 +1,58 @@
 ﻿@model IEnumerable<fri_pm_music_store.Models.Album>
 
 @{
-    ViewBag.Title = "Albums";
+    ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Albums</h2>
+<h2>Index</h2>
 
-<!-- ViewBag - not recommended for lists of data -->
-@*<ul>
-    @foreach (var a in ViewBag.albums)
-    {
-        <li>@a.Title</li>
-    }
-</ul>*@
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Artist.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Genre.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AlbumArtUrl)
+        </th>
+        <th></th>
+    </tr>
 
-<ul>
-    @foreach (var a in Model)
-    {
-        <li>@Html.ActionLink(a.Title, "Index")</li>
-    }
-</ul>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Artist.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Genre.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AlbumArtUrl)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.AlbumId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.AlbumId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AlbumId })
+        </td>
+    </tr>
+}
+
+</table>
