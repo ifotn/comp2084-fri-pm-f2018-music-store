@@ -28,6 +28,8 @@ namespace fri_pm_music_store.Models
         public string Title { get; set; }
 
         [Column(TypeName = "numeric")]
+        [Range(0, 100000, ErrorMessage = "Not a price, Dude")]
+        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
         [StringLength(1024)]
