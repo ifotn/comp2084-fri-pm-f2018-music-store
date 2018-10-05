@@ -18,6 +18,7 @@ namespace fri_pm_music_store.Models
         public int GenreId { get; set; }
 
         [StringLength(120)]
+        [Display(Name = "Genre")]
         public string Name { get; set; }
 
         [StringLength(4000)]

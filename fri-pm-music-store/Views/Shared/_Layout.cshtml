@@ -26,6 +26,7 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Gallery", "Gallery", "Home")</li>
                     <li>@Html.ActionLink("Store", "Index", "Store")</li>
+                    <li>@Html.ActionLink("Albums", "Index", "Albums")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -42,5 +43,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    <!-- source: https://kryogenix.org/code/browser/sorttable/ -->
+    <script src="~/Scripts/sorttable.js"></script>
 </body>
 </html>

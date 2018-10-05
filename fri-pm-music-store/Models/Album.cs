@@ -2,6 +2,7 @@ namespace fri_pm_music_store.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
@@ -30,6 +31,8 @@ namespace fri_pm_music_store.Models
         public decimal Price { get; set; }
 
         [StringLength(1024)]
+        //[Display(Name = "Album Cover")]  either of these work
+        [DisplayName("Album Cover")]
         public string AlbumArtUrl { get; set; }
 
         public virtual Artist Artist { get; set; }
