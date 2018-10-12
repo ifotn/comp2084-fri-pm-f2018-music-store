@@ -10,6 +10,7 @@ using fri_pm_music_store.Models;
 
 namespace fri_pm_music_store.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class AlbumsController : Controller
     {
         private MusicStoreModel db = new MusicStoreModel();
@@ -22,6 +23,8 @@ namespace fri_pm_music_store.Controllers
         }
 
         // GET: Albums/Details/5
+        //[OverrideAuthorization]
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
