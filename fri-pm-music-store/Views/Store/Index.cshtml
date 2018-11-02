@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<fri_pm_music_store.Models.Genre>
+
 @{
     ViewBag.Title = "Store";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,11 +7,20 @@
 
 <h2>MVC Music Store</h2>
 
-<p>Welcome to our Store</p>
+<p>Welcome to our Store.  Tell us what you like!</p>
 
-<ul>
-    <li>@Html.ActionLink("Product One", "Product", "Store", new { ProductName = "Product One" }, null)</li>
-    <li>@Html.ActionLink("Product Two", "Product", "Store", new { ProductName = "Product Two" }, null)</li>
-    <li>@Html.ActionLink("Product Three", "Product", "Store", new { ProductName = "Product Three" }, null)</li>
-</ul>
+<section class="container">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 text-center well">
+            <h3>@item.Name</h3>
+            <a href="/Store/Albums?genre=@item.Name">
+                <button class="btn btn-primary">Shop Now >></button>
+            </a>
+        </div>
+    }
+</section>
+
+
+
 
