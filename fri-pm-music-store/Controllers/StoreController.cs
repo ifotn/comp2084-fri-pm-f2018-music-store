@@ -35,5 +35,46 @@ namespace fri_pm_music_store.Controllers
             ViewBag.ProductName = ProductName;
             return View();
         }
+
+        // GET: Store/AddToCart
+        public ActionResult AddToCart(int AlbumId)
+        {
+            // identify the user's cart
+            GetCartId();
+            //string CurrentCartId = Session["CartId"].ToString();
+
+            // save new item
+            Cart CartItem = new Cart
+            {
+                CartId = Session["CartId"].ToString(),
+                AlbumId = AlbumId,
+                Count = 1,
+                DateCreated = DateTime.Now
+            };
+
+            db.Carts.Add(CartItem);
+            db.SaveChanges();
+
+            // show the cart page
+            return RedirectToAction("ShoppingCart");
+        }
+
+        private void GetCartId()
+        {
+            // if we don't already have a cart id in the session
+            if (Session["CartId"] == null)
+            {
+                if (User.Identity.Name == "")
+                {
+                    // user is anonymous, generate random unique string
+                    Session["CartId"] = Guid.NewGuid().ToString();                
+                }
+                else
+                {
+                    // is the user logged in?
+                    Session["CartId"] = User.Identity.Name;
+                }
+            } 
+        }
     }
 }
