@@ -76,5 +76,99 @@ namespace fri_pm_music_store.Controllers
                 }
             } 
         }
+
+        // GET: Store/ShoppingCart
+        public ActionResult ShoppingCart()
+        {
+            // get current user's cart items
+            GetCartId();
+            string CurrentCartId = Session["CartId"].ToString();
+
+            var CartItems = db.Carts.Where(c => c.CartId == CurrentCartId).ToList();
+            return View(CartItems);
+        }
+
+        // GET: Store/Checkout
+        [Authorize]
+        public ActionResult Checkout()
+        {
+            MigrateCart();
+            return View();
+        }
+
+        // POST: Store/Checkout
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Checkout(FormCollection values)
+        {
+            // create new order from form values
+            Order order = new Order();
+            TryUpdateModel(order);
+
+            // set the 4 auto properties
+            order.Username = User.Identity.Name;
+            order.Email = User.Identity.Name;
+            order.OrderDate = DateTime.Now;
+
+            // get the cart items & calc the order total
+            decimal CartTotal;
+            var CartItems = db.Carts.Where(c => c.CartId == User.Identity.Name).ToList();
+
+            CartTotal = (from c in CartItems
+                         select (int)c.Count * c.Album.Price).Sum();
+            order.Total = CartTotal;
+
+            // save the order
+            db.Orders.Add(order);
+            db.SaveChanges();
+
+            // save the items
+            foreach (Cart item in CartItems)
+            {
+                OrderDetail od = new OrderDetail
+                {
+                    AlbumId = item.AlbumId,
+                    Quantity = item.Count,
+                    UnitPrice = item.Album.Price,
+                    OrderId = order.OrderId
+                };
+                db.OrderDetails.Add(od);
+            }
+
+            db.SaveChanges();
+
+            // remove the items from the user's cart
+            foreach (Cart item in CartItems)
+            {
+                db.Carts.Remove(item);
+            }
+
+            db.SaveChanges();
+
+            // show confirmation page
+            return RedirectToAction("Details", "Orders", new { id = order.OrderId });
+        }
+
+        private void MigrateCart()
+        {
+            if (!String.IsNullOrEmpty(Session["CartId"].ToString()) && User.Identity.IsAuthenticated) {
+                if (Session["CartId"].ToString() != User.Identity.Name)
+                    {
+                        // user shopped anonymously but now has logged in to checkout
+                        string CurrentCartId = Session["CartId"].ToString();
+                        var CartItems = db.Carts.Where(c => c.CartId == CurrentCartId).ToList();
+
+                        foreach (Cart item in CartItems)
+                        {
+                            item.CartId = User.Identity.Name;
+                        }
+                        db.SaveChanges();
+
+                        // change the session variable
+                        Session["CartId"] = User.Identity.Name;
+                    }
+            }
+        }
     }
 }

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<fri_pm_music_store.Models.Cart>
+
+@{
+    ViewBag.Title = "Your Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    decimal Total = 0;
+}
+
+<h2>Your Cart</h2>
+
+<table class="table table-striped table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Album.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Album.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Count)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    Total += item.Count * item.Album.Price;
+    <tr>
+        <td>
+            <a href="/Albums/Details/@item.AlbumId">
+                @Html.DisplayFor(modelItem => item.Album.Title)
+            </a>
+            <h5>@item.Album.Artist.Name</h5>
+            <img src="@item.Album.AlbumArtUrl" alt="Cover" height="75" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Album.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Count)
+        </td>
+        <td>
+            @Html.ActionLink("Remove", "RemoveFromCart", new { id=item.RecordId }, new { @class = "text-danger" })
+        </td>
+    </tr>
+}
+    <tr>
+        <td></td>
+        <td>@String.Format("{0:c}", Total)</td>
+        <td>
+            <a href="/Store">
+                <button class="btn btn-primary"><< Keep Shopping</button>
+            </a>
+        </td>
+        <td>
+            @if (Total > 0)
+            {
+                <a href="/Store/Checkout">
+                    <button class="btn btn-primary">Checkout >></button>
+                </a>
+            }
+            
+        </td>
+    </tr>
+</table>

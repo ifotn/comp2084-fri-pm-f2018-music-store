@@ -20,27 +20,38 @@ namespace fri_pm_music_store.Models
         public DateTime OrderDate { get; set; }
 
         [StringLength(256)]
+       
         public string Username { get; set; }
 
         [StringLength(160)]
+        [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [StringLength(160)]
+        [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [StringLength(70)]
+        [Required]
         public string Address { get; set; }
 
         [StringLength(40)]
+        [Required]
         public string City { get; set; }
 
         [StringLength(40)]
+        [Required]
         public string State { get; set; }
 
         [StringLength(10)]
+        [Required]
+        [Display(Name = "Postal Code")]
         public string PostalCode { get; set; }
 
         [StringLength(40)]
+        [Required]
         public string Country { get; set; }
 
         [StringLength(24)]
