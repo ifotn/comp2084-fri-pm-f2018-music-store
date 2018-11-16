@@ -35,7 +35,20 @@ namespace fri_pm_music_store.Tests.Controllers
             ViewResult result = controller.About() as ViewResult;
 
             // Assert
-            Assert.AreEqual("Your application description page.", result.ViewBag.Message);
+            Assert.AreEqual("Some content about us", result.ViewBag.Message);
+        }
+
+        [TestMethod]
+        public void AboutLoadsView()
+        {
+            // arrange
+            HomeController controller = new HomeController();
+
+            // act
+            ViewResult result = controller.About() as ViewResult;
+
+            // assert
+            Assert.AreEqual("About-Us", result.ViewName);
         }
 
         [TestMethod]
@@ -48,6 +61,32 @@ namespace fri_pm_music_store.Tests.Controllers
             ViewResult result = controller.Contact() as ViewResult;
 
             // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void ContactViewBagValid()
+        {
+            // arrange
+            HomeController controller = new HomeController();
+
+            // act
+            ViewResult viewResult = controller.Contact() as ViewResult;
+
+            // assert
+            Assert.AreEqual("Your contact page.", viewResult.ViewBag.Message);
+        }
+
+        [TestMethod]
+        public void Gallery()
+        {
+            // arrange
+            HomeController controller = new HomeController();
+
+            // act
+            ViewResult result = controller.Gallery() as ViewResult;
+
+            // assert
             Assert.IsNotNull(result);
         }
     }
