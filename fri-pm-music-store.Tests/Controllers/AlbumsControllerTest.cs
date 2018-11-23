@@ -74,5 +74,30 @@ namespace fri_pm_music_store.Tests.Controllers
             // assert
             CollectionAssert.AreEqual(albums, result);
         }
+
+        // GET: Albums/Details
+        #region
+        
+        [TestMethod]
+        public void DetailsNoIdLoadsError()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Details(null);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DetailsInvalidIdLoadsError()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Details(534);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+        #endregion
+
     }
 }

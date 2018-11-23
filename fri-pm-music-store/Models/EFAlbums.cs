@@ -18,6 +18,7 @@ namespace fri_pm_music_store.Models
             db.SaveChanges();
         }
 
+
         public Album Save(Album album)
         {
             if (album.AlbumId == 0)

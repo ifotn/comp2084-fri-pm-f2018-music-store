@@ -39,22 +39,32 @@ namespace fri_pm_music_store.Controllers
             return View("Index", albums.ToList());
         }
 
-        //// GET: Albums/Details/5
-        ////[OverrideAuthorization]
-        //[AllowAnonymous]
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Album album = db.Albums.Find(id);
-        //    if (album == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(album);
-        //}
+        // GET: Albums/Details/5
+        //[OverrideAuthorization]
+        [AllowAnonymous]
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                // scaffold code
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
+            }
+
+            // old scaffold code - doesn't work with our mock
+            // Album album = db.Albums.Find(id);
+
+            // new code that works with both ef & mock repositories
+            Album album = db.Albums.SingleOrDefault(a => a.AlbumId == id);
+
+            if (album == null)
+            {
+                // scaffold code
+                // return HttpNotFound();
+                return View("Error");
+            }
+            return View(album);
+        }
 
         //// GET: Albums/Create
         //public ActionResult Create()

@@ -11,5 +11,6 @@ namespace fri_pm_music_store.Models
         IQueryable<Album> Albums { get; }
         Album Save(Album album);
         void Delete(Album album);
+
     }
 }
