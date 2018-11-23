@@ -63,7 +63,7 @@ namespace fri_pm_music_store.Controllers
                 // return HttpNotFound();
                 return View("Error");
             }
-            return View(album);
+            return View("Details", album);
         }
 
         //// GET: Albums/Create

@@ -97,6 +97,32 @@ namespace fri_pm_music_store.Tests.Controllers
             // assert
             Assert.AreEqual("Error", result.ViewName);
         }
+
+        [TestMethod]
+        public void DetailsValidIdLoadsView()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Details(300);
+
+            // assert
+            Assert.AreEqual("Details", result.ViewName);
+
+        }
+
+        [TestMethod]
+        public void DetailsValidIdLoadsAlbum()
+        {
+            // act
+            // call the method
+            // convert the actionresult to viewresult
+            // then get the viewresult's model
+            // cast the model to correct object type
+            Album result = (Album)((ViewResult)controller.Details(300)).Model;
+
+            // assert
+            Assert.AreEqual(albums[1], result);
+        }
+        
         #endregion
 
     }
