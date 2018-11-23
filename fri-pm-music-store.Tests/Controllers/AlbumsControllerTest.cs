@@ -113,8 +113,8 @@ namespace fri_pm_music_store.Tests.Controllers
         public void DetailsValidIdLoadsAlbum()
         {
             // act
-            // call the method
-            // convert the actionresult to viewresult
+            // call the details method
+            // convert the actionresult returned by the method to viewresult
             // then get the viewresult's model
             // cast the model to correct object type
             Album result = (Album)((ViewResult)controller.Details(300)).Model;
