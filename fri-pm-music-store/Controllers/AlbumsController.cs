@@ -66,13 +66,15 @@ namespace fri_pm_music_store.Controllers
             return View("Details", album);
         }
 
-        //// GET: Albums/Create
-        //public ActionResult Create()
-        //{
-        //    ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name");
-        //    ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name");
-        //    return View();
-        //}
+        // GET: Albums/Create
+        public ActionResult Create()
+        {
+            //scaffold code
+            ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name");
+            ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name");
+
+            return View("Create");
+        }
 
         // POST: Albums/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -95,15 +97,12 @@ namespace fri_pm_music_store.Controllers
                             // get file path dynamically
                             string path = Server.MapPath("~/Content/Images/") + file.FileName;
                             file.SaveAs(path);
-
                             album.AlbumArtUrl = "/Content/Images/" + file.FileName;
                         }
                     }
-
                 }
 
                 db.Save(album);
-
                 //db.Albums.Add(album);
                 //db.SaveChanges();
                 return RedirectToAction("Index");
@@ -115,22 +114,27 @@ namespace fri_pm_music_store.Controllers
             return View("Create", album);
         }
 
-        //// GET: Albums/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Album album = db.Albums.Find(id);
-        //    if (album == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name", album.ArtistId);
-        //    ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name", album.GenreId);
-        //    return View(album);
-        //}
+        // GET: Albums/Edit/5 
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return View("Error");
+            }
+
+            //Album album = db.Album.Find(id);
+            Album album = db.Albums.SingleOrDefault(a => a.AlbumId == id);
+
+            if (album == null)
+            {
+                return View("Error");
+            }
+
+            ViewBag.ArtistId = new SelectList(db.Artists.OrderBy(a => a.Name), "ArtistId", "Name", album.ArtistId);
+            ViewBag.GenreId = new SelectList(db.Genres.OrderBy(g => g.Name), "GenreId", "Name", album.GenreId);
+
+            return View("Edit", album);
+        }
 
         //// POST: Albums/Edit/5
         //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -165,31 +169,56 @@ namespace fri_pm_music_store.Controllers
         //    return View(album);
         //}
 
-        //// GET: Albums/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Album album = db.Albums.Find(id);
-        //    if (album == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(album);
-        //}
+        // GET: Albums/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return View("Error");
+            }
+            // old scaffold code - doesn't work with our moch
+            //Album album = db.Albums.Find(id);
 
-        //// POST: Albums/Delete/5
-        //[HttpPost, ActionName("Delete")]
+            // new code that works with both ef and mock repositories
+            Album album = db.Albums.SingleOrDefault(a => a.AlbumId == id);
+
+            if (album == null)
+            {
+                //return HttpNotFound();
+                return View("Error");
+            }
+            return View("Delete", album);
+        }
+
+        // POST: Albums/Delete/5
         //[ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete")]
         //public ActionResult DeleteConfirmed(int id)
+        [ValidateAntiForgeryToken]
         //{
+        public ActionResult DeleteConfirmed(int? id)
         //    Album album = db.Albums.Find(id);
-        //    db.Albums.Remove(album);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        {
+            //    db.Albums.Remove(album);
+            //Scaffolded code - no longer needed
+            //    db.SaveChanges();
+            //Album album = db.Albums.Find(id);
+            //    return RedirectToAction("Index");
+            //db.Albums.Remove(album);
+            //}
+            //db.SaveChanges();
+            Album album = db.Albums.SingleOrDefault(a => a.AlbumId == id);
+            if (album == null)
+            {
+                return View("Error");
+            }
+            else
+            {
+                db.Delete(album);
+                return RedirectToAction("Index");
+            }
+        }
 
         //protected override void Dispose(bool disposing)
         //{

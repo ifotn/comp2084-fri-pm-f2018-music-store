@@ -65,6 +65,8 @@ namespace fri_pm_music_store.Tests.Controllers
 
         }
 
+        // GET: Albums/Index
+        #region
         [TestMethod]
         public void IndexLoadsView()
         {
@@ -88,9 +90,11 @@ namespace fri_pm_music_store.Tests.Controllers
             CollectionAssert.AreEqual(albums, result);
         }
 
+        #endregion
+
         // GET: Albums/Details
         #region
-        
+
         [TestMethod]
         public void DetailsNoIdLoadsError()
         {
@@ -110,8 +114,6 @@ namespace fri_pm_music_store.Tests.Controllers
             // assert
             Assert.AreEqual("Error", result.ViewName);
         }
-        #endregion
-
 
         [TestMethod]
         public void DetailsValidIdLoadsAlbum()
@@ -122,10 +124,115 @@ namespace fri_pm_music_store.Tests.Controllers
             // assert
             Assert.AreEqual(albums[1], result);
         }
+        #endregion
 
+        //GET: Albums/Edit
         #region
 
+        [TestMethod]
+        public void EditNoIdLoadsError()
+        {
+            // act 
+            ViewResult result = (ViewResult)controller.Edit(null);
+
+            // assert 
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditIdIsValidLoadsAlbum()
+        {
+            // act
+            Album result = (Album)((ViewResult)controller.Edit(300)).Model;
+
+            // assert 
+            Assert.AreEqual(albums[1], result);
+        }
+
+        [TestMethod]
+        public void EditInvalidIdLoadsError()
+        {
+            // act 
+            ViewResult result = (ViewResult)controller.Edit(999);
+
+            // assert 
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void EditViewBagArtist()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Edit(100);
+
+            // assert
+            Assert.IsNotNull(result.ViewBag.ArtistId);
+        }
+
+        [TestMethod]
+        public void EditViewBagGenre()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Edit(100);
+
+            // assert
+            Assert.IsNotNull(result.ViewBag.GenreId);
+        }
+
+        [TestMethod]
+        public void EditValidIdLoadsView()
+        {
+            // act 
+            ViewResult result = (ViewResult)controller.Edit(100);
+
+            // assert
+            Assert.AreEqual("Edit", result.ViewName);
+        }
+
+        #endregion
+
+        // GET: Albums/Edit
+        #region
+
+        #endregion
+
+        //GET: Albums/Create
+        #region
+
+        [TestMethod]
+        public void CreateLoadsView()
+        {
+            //act
+            ViewResult result = (ViewResult)controller.Create();
+
+            //assert
+            Assert.AreEqual("Create", result.ViewName);
+        }
+
+        [TestMethod]
+        public void CreateArtistViewBagNotNull()
+        {
+            //act
+            var result = ((ViewResult)controller.Create());
+
+            //assert
+            Assert.IsNotNull(result.ViewBag.ArtistId);
+        }
+
+        [TestMethod]
+        public void CreateGenreViewBagNotNull()
+        {
+            //act
+            var result = ((ViewResult)controller.Create());
+
+            //assert
+            Assert.IsNotNull(result.ViewBag.GenreId);
+        }
+
+#endregion
+
         // POST: Albums/Create
+        #region
 
         // model state is not null, save new record
         [TestMethod]
@@ -172,8 +279,86 @@ namespace fri_pm_music_store.Tests.Controllers
 
         #endregion
 
+        // GET: Albums/Delete
+        #region
 
+        [TestMethod]
+        public void DeleteNoIdLoadsError()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Delete(null);
 
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteInvalidIdLoadsError()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Delete(543);
+
+            // assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteValidIdLoadsView()
+        {
+            // act
+            ViewResult result = (ViewResult)controller.Delete(100);
+
+            // assert
+            Assert.AreEqual("Delete", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteValidIdLoadsAlbum()
+        {
+            // act
+            // is different because not interested in viewresult, but in data that comes with view
+            Album result = (Album)((ViewResult)controller.Delete(300)).Model;
+
+            // assert
+           Assert.AreEqual(albums[1], result);
+        }
+
+        #endregion
+
+        // POST: Albums/Delete
+        #region
+
+        [TestMethod]
+        public void DeleteConfirmedIdLoadsError()
+        {
+            //Act
+            ViewResult result = (ViewResult)controller.DeleteConfirmed(-1);
+
+            //Assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteConfirmedNoIdLoadsError()
+        {
+            //Act
+            ViewResult result = (ViewResult)controller.DeleteConfirmed(null);
+
+            //Assert
+            Assert.AreEqual("Error", result.ViewName);
+        }
+
+        [TestMethod]
+        public void DeleteConfirmedDataSuccessful()
+        {
+            //Act
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.DeleteConfirmed(100);
+
+            //Assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        #endregion
 
     }
 }
