@@ -18,7 +18,8 @@ namespace fri_pm_music_store.Tests.Controllers
         AlbumsController controller;
         Mock<IAlbumsMock> mock;
         List<Album> albums;
- 
+        Album album;
+
         [TestInitialize]
         public void TestInitalize()
         {
@@ -46,6 +47,18 @@ namespace fri_pm_music_store.Tests.Controllers
 
             // put list into mock object and pass it to the albums controller
             //albums.OrderBy(a => a.Artist.Name).ThenBy(a => a.Title);
+
+            album = new Album
+            {
+                AlbumId = 1010,
+                Title = "OneZero - OneZero",
+                Price = 12.99m,
+                Artist = new Artist
+                {
+                    ArtistId = 1100,
+                    Name = "Imagine Dragons"
+                }
+            };
 
             mock.Setup(m => m.Albums).Returns(albums.AsQueryable());
             controller = new AlbumsController(mock.Object);
@@ -97,33 +110,70 @@ namespace fri_pm_music_store.Tests.Controllers
             // assert
             Assert.AreEqual("Error", result.ViewName);
         }
+        #endregion
 
-        [TestMethod]
-        public void DetailsValidIdLoadsView()
-        {
-            // act
-            ViewResult result = (ViewResult)controller.Details(300);
-
-            // assert
-            Assert.AreEqual("Details", result.ViewName);
-
-        }
 
         [TestMethod]
         public void DetailsValidIdLoadsAlbum()
         {
             // act
-            // call the details method
-            // convert the actionresult returned by the method to viewresult
-            // then get the viewresult's model
-            // cast the model to correct object type
             Album result = (Album)((ViewResult)controller.Details(300)).Model;
 
             // assert
             Assert.AreEqual(albums[1], result);
         }
-        
+
+        #region
+
+        // POST: Albums/Create
+
+        // model state is not null, save new record
+        [TestMethod]
+        public void ModelStateNotNullSavesNewRecord()
+        {
+            // act
+            Album copiedAlbumFromGlobal = album;
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.Create(copiedAlbumFromGlobal);
+
+            // assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        // Check ViewBag values(2) - For Artist
+        [TestMethod]
+        public void CheckViewBagValueForArtist()
+        {
+            // arrange
+            Album invalidAlbum = new Album();
+
+
+            // act
+            controller.ModelState.AddModelError("some error name", "fake error description");
+            ViewResult result = (ViewResult)controller.Create(invalidAlbum);
+
+            // assert
+            Assert.IsNotNull(result.ViewBag.ArtistId);
+        }
+
+        // Check ViewBag values(2) - For Genre
+        [TestMethod]
+        public void CheckViewBagValueForGenre()
+        {
+            // arrange
+            Album invalidAlbum = new Album();
+
+            // act
+            controller.ModelState.AddModelError("some error name", "fake error description");
+            ViewResult result = (ViewResult)controller.Create(invalidAlbum);
+
+            // assert
+            Assert.IsNotNull(result.ViewBag.GenreId);
+        }
+
         #endregion
+
+
+
 
     }
 }

@@ -7,7 +7,7 @@ namespace fri_pm_music_store.Models
     using System.Data.Entity.Spatial;
 
     [Table("Artist")]
-    public partial class Artist
+    public partial class Artist 
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Artist()
