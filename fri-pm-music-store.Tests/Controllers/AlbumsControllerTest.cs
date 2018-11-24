@@ -122,7 +122,42 @@ namespace fri_pm_music_store.Tests.Controllers
             // assert
             Assert.AreEqual(albums[1], result);
         }
-        
+
+        #endregion
+
+        // POST: Delete
+        #region
+        [TestMethod]
+        public void DeleteInvalidIdLoadsError()
+        {
+            //Act
+            ViewResult result = (ViewResult)controller.DeleteConfirmed(-1);
+
+            //Assert
+            Assert.AreEqual("Error", result.ViewName);
+
+        }
+
+        [TestMethod]
+        public void DeleteNoIdLoadsError()
+        {
+            //Act
+            ViewResult result = (ViewResult)controller.DeleteConfirmed(null);
+
+            //Assert
+            Assert.AreEqual("Error", result.ViewName);
+
+        }
+
+        [TestMethod]
+        public void DeleteDataSuccessful()
+        {
+            //Act
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.DeleteConfirmed(100);
+
+            //Assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
         #endregion
 
     }
