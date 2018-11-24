@@ -173,16 +173,28 @@ namespace fri_pm_music_store.Controllers
         //    return View(album);
         //}
 
-        //// POST: Albums/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Album album = db.Albums.Find(id);
-        //    db.Albums.Remove(album);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+
+        // POST: Albums/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int? id)
+        {
+            //Scaffolded code - no longer needed
+            //Album album = db.Albums.Find(id);
+            //db.Albums.Remove(album);
+            //db.SaveChanges();
+
+            Album album = db.Albums.SingleOrDefault(a => a.AlbumId == id);
+            if (album == null)
+            {
+                return View("Error");
+            }
+            else
+            {
+                db.Delete(album);
+                return RedirectToAction("Index");
+            }
+        }
 
         //protected override void Dispose(bool disposing)
         //{
