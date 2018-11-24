@@ -12,6 +12,17 @@ namespace fri_pm_music_store.Models
 
         public IQueryable<Album> Albums { get { return db.Albums; } }
 
+        public IQueryable<Artist> Artists { get { return db.Artists; } }
+
+        public IQueryable<Genre> Genres { get { return db.Genres; } }
+
+        //public void Create(Album album)
+        //{
+        //    db.Albums.Add(album);
+        //    db.SaveChanges();
+        //}
+    
+
         public void Delete(Album album)
         {
             db.Albums.Remove(album);

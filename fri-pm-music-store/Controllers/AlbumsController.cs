@@ -35,7 +35,7 @@ namespace fri_pm_music_store.Controllers
         {
             var albums = db.Albums.Include(a => a.Artist).Include(a => a.Genre).OrderBy(a => a.Artist.Name).ThenBy(a => a.Title);
             //return View(albums.ToList());
-        
+
             return View("Index", albums.ToList());
         }
 
@@ -74,39 +74,46 @@ namespace fri_pm_music_store.Controllers
         //    return View();
         //}
 
-        //// POST: Albums/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "AlbumId,GenreId,ArtistId,Title,Price,AlbumArtUrl")] Album album)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        // upload album cover if there is one
-        //        if (Request.Files.Count > 0)
-        //        {
-        //            var file = Request.Files[0];
+        // POST: Albums/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "AlbumId,GenreId,ArtistId,Title,Price,AlbumArtUrl")] Album album)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request != null)
+                {
+                    // upload album cover if there is one
+                    if (Request.Files.Count > 0)
+                    {
+                        var file = Request.Files[0];
 
-        //            if (file.FileName != null && file.ContentLength > 0)
-        //            {
-        //                // get file path dynamically
-        //                string path = Server.MapPath("~/Content/Images/") + file.FileName;
-        //                file.SaveAs(path);
+                        if (file.FileName != null && file.ContentLength > 0)
+                        {
+                            // get file path dynamically
+                            string path = Server.MapPath("~/Content/Images/") + file.FileName;
+                            file.SaveAs(path);
 
-        //                album.AlbumArtUrl = "/Content/Images/" + file.FileName;
-        //            }
-        //        }
+                            album.AlbumArtUrl = "/Content/Images/" + file.FileName;
+                        }
+                    }
 
-        //        db.Albums.Add(album);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
+                }
 
-        //    ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
-        //    ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
-        //    return View(album);
-        //}
+                db.Save(album);
+
+                //db.Albums.Add(album);
+                //db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.ArtistId = new SelectList(db.Artists, "ArtistId", "Name", album.ArtistId);
+            ViewBag.GenreId = new SelectList(db.Genres, "GenreId", "Name", album.GenreId);
+
+            return View("Create", album);
+        }
 
         //// GET: Albums/Edit/5
         //public ActionResult Edit(int? id)
