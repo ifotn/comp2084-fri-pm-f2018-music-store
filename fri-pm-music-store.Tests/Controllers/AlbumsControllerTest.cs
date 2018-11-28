@@ -132,8 +132,11 @@ namespace fri_pm_music_store.Tests.Controllers
         [TestMethod]
         public void EditNoIdLoadsError()
         {
+            // arrange
+            int? id = null;
+
             // act 
-            ViewResult result = (ViewResult)controller.Edit(null);
+            ViewResult result = (ViewResult)controller.Edit(id);
 
             // assert 
             Assert.AreEqual("Error", result.ViewName);
@@ -191,8 +194,86 @@ namespace fri_pm_music_store.Tests.Controllers
 
         #endregion
 
-        // GET: Albums/Edit
+        // POST: Albums/Edit
         #region
+
+        //If Model valid, update album
+        [TestMethod]
+        public void EditModelIsValidCreateAlbum()
+        {
+            //act 
+            Album testAlbum = new Album { AlbumId = 1 };
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.Edit(testAlbum);
+
+            //assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+        //If Model valid, return Index view
+        [TestMethod]
+        public void EditModelIsValidReturnView()
+        {
+            //act
+            RedirectToRouteResult result = (RedirectToRouteResult)controller.Edit(albums[0]);
+
+            //Assert
+            Assert.AreEqual("Index", result.RouteValues["action"]);
+        }
+
+		//If Model invalid, check viewbag values artist
+        [TestMethod]
+        public void EditCheckViewBagValuesArtist()
+        {
+            //act arrange 
+            controller.ModelState.AddModelError("Error", "Error thing");
+            Album testAlbum = new Album { AlbumId = 1 };
+            ViewResult result = (ViewResult)controller.Edit(testAlbum);
+
+            //assert
+            Assert.IsNotNull(result.ViewBag.ArtistId);
+        }
+
+        //If Model invalid, check viewbag values genres
+        [TestMethod]
+        public void EditCheckViewBagValuesGenre()
+        {
+            //act arrange 
+            controller.ModelState.AddModelError("Error", "Error thing");
+            Album testAlbum = new Album { AlbumId = 1 };
+            ViewResult result = (ViewResult)controller.Edit(testAlbum);
+
+            //assert
+            Assert.IsNotNull(result.ViewBag.GenreId);
+        }
+
+        //If Model invalid, return the same view
+        [TestMethod]
+        public void EditModelInvalidReturnView()
+        {
+            controller.ModelState.AddModelError("Error", "Error thing");
+            Album testAlbum = new Album { AlbumId = 1 };
+
+            // act
+            ViewResult result = (ViewResult)controller.Edit(testAlbum);
+
+            // assert
+            Assert.AreEqual("Edit", result.ViewName);
+        }
+
+        //If Model invalid, reload the same album
+        [TestMethod]
+        public void EditModelInvalidReloadAlbum()
+        {
+            // arrange
+            controller.ModelState.AddModelError("Error", "Error thing");
+            Album testAlbum = new Album { AlbumId = 1 };
+
+            // act
+            Album result = (Album)((ViewResult)controller.Edit(testAlbum)).Model;
+
+            // assert
+            Assert.AreEqual(testAlbum, result);
+        }
 
         #endregion
 
